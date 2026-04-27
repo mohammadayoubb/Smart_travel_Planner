@@ -1,122 +1,178 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
+import axios from "axios";
+import {
+  Plane,
+  MapPin,
+  Send,
+  Sparkles,
+  Search,
+  CloudSun,
+  Database,
+  Bot,
+} from "lucide-react";
+import "./App.css";
+
+const API_BASE_URL = "http://127.0.0.1:8000";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [userId, setUserId] = useState(1);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [runId, setRunId] = useState(null);
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [toolSources, setToolSources] = useState([]);
+
+  async function handleAskAgent(e) {
+    e.preventDefault();
+
+    if (!question.trim()) return;
+
+    setLoading(true);
+    setAnswer("");
+    setRunId(null);
+    setStatus("");
+    setToolSources([]);
+
+    try {
+      const response = await axios.post(`${API_BASE_URL}/agent/ask`, {
+        user_id: Number(userId),
+        question,
+      });
+
+      setAnswer(response.data.answer);
+      setRunId(response.data.run_id);
+      setStatus(response.data.status);
+
+      const sourceMatches = response.data.answer.match(/documents are: (.*?)\./);
+      if (sourceMatches?.[1]) {
+        setToolSources(sourceMatches[1].split(",").map((item) => item.trim()));
+      }
+    } catch (error) {
+      setAnswer("Something went wrong. Make sure the FastAPI backend is running.");
+      setStatus("error");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <main className="app-shell">
+      <section className="hero">
+        <div className="hero-badge">
+          <Sparkles size={16} />
+          AI Travel Planner
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+
+        <h1>Smart Travel Planner</h1>
+        <p>
+          Ask for a trip idea and the assistant will use RAG, stored destination
+          knowledge, and live weather data to build a travel recommendation.
+        </p>
       </section>
 
-      <div className="ticks"></div>
+      <section className="layout">
+        <div className="chat-card">
+          <div className="card-header">
+            <div>
+              <h2>Plan a trip</h2>
+              <p>Describe your budget, dates, weather preference, and activities.</p>
+            </div>
+            <Plane className="header-icon" />
+          </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+          <form onSubmit={handleAskAgent} className="chat-form">
+            <label>
+              User ID
+              <input
+                type="number"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                min="1"
+              />
+            </label>
+
+            <label>
+              Travel question
+              <textarea
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                placeholder="Example: I want somewhere warm with hiking and fewer crowds."
+              />
+            </label>
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Planning..." : "Ask Agent"}
+              <Send size={18} />
+            </button>
+          </form>
+
+          <div className="answer-box">
+            <div className="answer-title">
+              <Bot size={18} />
+              Agent Answer
+            </div>
+
+            {answer ? (
+              <p>{answer}</p>
+            ) : (
+              <p className="muted">
+                Your travel plan will appear here after you ask the agent.
+              </p>
+            )}
+
+            {runId && (
+              <div className="run-meta">
+                <span>Run ID: {runId}</span>
+                <span>Status: {status}</span>
+              </div>
+            )}
+          </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
+
+        <aside className="tools-panel">
+          <h2>Tool Activity</h2>
+
+          <div className="tool-card active">
+            <Database size={22} />
+            <div>
+              <h3>RAG Retrieval</h3>
+              <p>Searches stored destination documents.</p>
+            </div>
+          </div>
+
+          <div className="tool-card active">
+            <CloudSun size={22} />
+            <div>
+              <h3>Live Weather</h3>
+              <p>Checks current weather for the selected destination.</p>
+            </div>
+          </div>
+
+          <div className="tool-card">
+            <Search size={22} />
+            <div>
+              <h3>ML Classifier</h3>
+              <p>Will classify destination travel style.</p>
+            </div>
+          </div>
+
+          <div className="sources">
+            <h3>
+              <MapPin size={17} />
+              Retrieved Sources
+            </h3>
+
+            {toolSources.length > 0 ? (
+              toolSources.map((source) => <span key={source}>{source}</span>)
+            ) : (
+              <p className="muted">No sources retrieved yet.</p>
+            )}
+          </div>
+        </aside>
       </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    </main>
+  );
 }
 
-export default App
+export default App;
