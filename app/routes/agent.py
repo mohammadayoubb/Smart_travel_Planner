@@ -30,14 +30,31 @@ async def ask_agent(
         top_k=3,
     )
 
- 
+    if not rag_results:
+        answer = "I could not find relevant destination documents. Please run /rag/ingest first."
 
-    sources = ", ".join(result["source"] for result in rag_results)
+        updated_run = await update_agent_run(
+            db=db,
+            run=run,
+            answer=answer,
+        )
+
+        return AgentQuestionResponse(
+            run_id=updated_run.id,
+            answer=updated_run.answer,
+            status=updated_run.status,
+        )
 
     destination = rag_results[0]["source"].replace(".txt", "").replace("_", " ").title()
+    sources = ", ".join(result["source"] for result in rag_results)
 
-    weather = await get_weather_summary(destination)
-
+    try:
+        weather = await get_weather_summary(destination)
+    except Exception:
+        weather = {
+            "temperature_c": "N/A",
+            "weather": "weather unavailable",
+        }
 
     answer = f"""
      Suggested Destination: {destination}
