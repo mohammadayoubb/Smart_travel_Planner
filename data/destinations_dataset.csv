@@ -1,0 +1,121 @@
+destination,country,avg_daily_budget_usd,warm_weather_score,tourist_crowd_score,hiking_score,beach_score,museum_score,nightlife_score,family_score,luxury_score,safety_score,description,travel_style
+Queenstown,New Zealand,120,6,7,10,3,4,6,6,7,9,"Mountain town known for hiking, adventure sports, lakes, and outdoor activities.",Adventure
+Patagonia,Argentina/Chile,95,4,5,10,1,3,2,4,4,8,"Remote region famous for trekking, glaciers, mountains, and national parks.",Adventure
+Banff,Canada,140,4,8,10,2,3,3,7,6,9,"Canadian Rockies destination with hiking, lakes, wildlife, skiing, and scenic drives.",Adventure
+Interlaken,Switzerland,180,5,8,9,2,4,5,7,8,10,"Alpine destination for hiking, paragliding, lakes, and mountain excursions.",Adventure
+Pokhara,Nepal,35,7,6,10,1,4,4,5,3,7,"Gateway to Himalayan trekking with lakes, mountain views, and adventure activities.",Adventure
+Bali,Indonesia,65,10,8,5,10,4,7,7,7,8,"Warm island destination with beaches, spas, yoga retreats, resorts, and rice terraces.",Relaxation
+Maldives,Maldives,250,10,6,1,10,2,3,7,10,8,"Tropical island destination with beaches, resorts, snorkeling, and quiet relaxation.",Relaxation
+Seychelles,Seychelles,180,10,5,4,10,3,3,7,8,8,"Island destination with quiet beaches, nature reserves, resorts, and calm atmosphere.",Relaxation
+Santorini,Greece,160,9,9,4,8,5,6,6,8,9,"Greek island known for sunsets, sea views, boutique hotels, and relaxing holidays.",Relaxation
+Phuket,Thailand,70,10,8,3,10,3,8,7,7,7,"Beach destination with resorts, islands, spas, warm weather, and relaxed activities.",Relaxation
+Rome,Italy,130,8,9,2,2,10,7,7,7,8,"Historic city with ancient ruins, museums, churches, food culture, and architecture.",Culture
+Kyoto,Japan,120,7,8,4,1,10,5,7,7,10,"Cultural city with temples, gardens, traditional streets, tea houses, and history.",Culture
+Cairo,Egypt,55,9,8,1,1,10,5,6,5,6,"Historic city with pyramids, museums, Islamic architecture, markets, and ancient culture.",Culture
+Istanbul,Turkey,75,7,8,2,2,9,7,7,6,7,"City connecting Europe and Asia with mosques, palaces, bazaars, food, and history.",Culture
+Paris,France,170,6,10,1,1,10,8,7,9,8,"Major cultural capital with museums, architecture, food, fashion, and historic neighborhoods.",Culture
+Hanoi,Vietnam,35,8,7,3,2,7,6,6,3,8,"Affordable city with street food, history, local culture, and low travel costs.",Budget
+Chiang Mai,Thailand,40,9,6,6,1,6,5,6,4,8,"Affordable northern Thai city with temples, markets, nature, and budget accommodation.",Budget
+Krakow,Poland,60,5,7,3,1,8,7,7,4,9,"Affordable European city with history, food, nightlife, and cultural attractions.",Budget
+La Paz,Bolivia,35,5,4,7,1,6,5,4,2,6,"Low-cost destination with markets, mountain scenery, local culture, and nearby adventure.",Budget
+Tbilisi,Georgia,45,7,5,5,1,6,6,6,4,8,"Affordable city with food, wine culture, architecture, and access to mountain trips.",Budget
+Dubai,United Arab Emirates,220,10,8,2,7,6,8,8,10,9,"Luxury city with premium hotels, shopping, fine dining, beaches, and modern attractions.",Luxury
+Monaco,Monaco,300,8,8,2,6,5,8,5,10,10,"High-end destination with luxury hotels, yachts, casinos, fine dining, and exclusivity.",Luxury
+St. Moritz,Switzerland,280,3,7,6,1,4,6,6,10,10,"Luxury alpine resort known for skiing, premium hotels, fine dining, and mountain scenery.",Luxury
+Bora Bora,French Polynesia,350,10,6,3,10,2,3,6,10,9,"Luxury island destination with overwater villas, clear lagoons, beaches, and honeymoon resorts.",Luxury
+Milan,Italy,190,7,8,1,1,8,8,6,9,8,"Fashion and design city with luxury shopping, fine dining, hotels, and cultural sites.",Luxury
+Orlando,United States,180,9,10,1,4,5,5,10,6,8,"Family destination with theme parks, resorts, entertainment, and child-friendly activities.",Family
+Singapore,Singapore,150,10,8,3,4,8,7,9,8,10,"Safe family-friendly city with attractions, gardens, museums, food, and efficient transport.",Family
+Copenhagen,Denmark,170,5,7,2,3,8,6,9,7,10,"Safe city with parks, museums, cycling, family attractions, and relaxed urban planning.",Family
+Gold Coast,Australia,140,8,8,4,9,4,6,9,6,9,"Family-friendly coastal city with beaches, theme parks, wildlife parks, and outdoor activities.",Family
+Tokyo,Japan,160,6,9,2,2,9,8,9,8,10,"Safe city with museums, theme parks, food, transport, shopping, and family attractions.",Family
+Marrakesh,Morocco,55,9,7,3,1,8,6,5,4,7,"Marrakesh is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Lisbon,Portugal,95,8,8,3,5,8,7,7,6,8,"Lisbon is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Cusco,Peru,50,6,7,8,1,8,5,5,4,7,"Cusco is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Cape Town,South Africa,90,8,7,8,8,6,7,6,6,6,"Cape Town is a adventure-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Adventure
+Reykjavik,Iceland,190,3,7,8,1,6,6,6,7,9,"Reykjavik is a adventure-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Adventure
+Zermatt,Switzerland,220,3,7,10,1,3,4,6,9,10,"Zermatt is a adventure-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Adventure
+Da Nang,Vietnam,45,9,6,4,9,4,5,7,4,8,"Da Nang is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
+Budapest,Hungary,70,6,7,2,1,8,8,7,5,8,"Budapest is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
+Sofia,Bulgaria,50,6,4,4,1,6,5,6,3,8,"Sofia is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
+Zanzibar,Tanzania,85,10,6,2,10,4,4,6,6,7,"Zanzibar is a relaxation-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Relaxation
+Mauritius,Mauritius,140,10,6,4,10,4,4,8,8,9,"Mauritius is a relaxation-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Relaxation
+Tulum,Mexico,110,10,8,3,9,5,6,6,7,7,"Tulum is a relaxation-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Relaxation
+Nice,France,170,8,8,3,8,7,7,6,9,8,"Nice is a luxury-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Luxury
+Doha,Qatar,200,10,6,1,5,7,6,8,9,9,"Doha is a luxury-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Luxury
+Aspen,United States,300,3,7,7,1,4,6,6,10,9,"Aspen is a luxury-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Luxury
+Barcelona,Spain,130,8,9,3,7,9,8,8,7,8,"Barcelona is a family-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Family
+San Diego,United States,170,8,7,3,9,6,6,9,7,8,"San Diego is a family-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Family
+Vancouver,Canada,150,5,7,7,5,7,6,9,7,9,"Vancouver is a family-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Family
+Athens,Greece,100,9,8,3,5,9,7,7,6,8,"Athens is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Seoul,South Korea,110,6,8,3,2,8,8,8,7,9,"Seoul is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Siem Reap,Cambodia,35,9,7,2,1,9,4,5,3,7,"Siem Reap is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
+Luang Prabang,Laos,40,8,5,5,1,7,3,5,3,8,"Luang Prabang is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
+Madeira,Portugal,100,7,6,9,6,4,4,7,6,9,"Madeira is a adventure-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Adventure
+Moab,United States,120,8,7,10,1,2,3,6,5,8,"Moab is a adventure-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Adventure
+Fiji,Fiji,160,10,5,3,10,3,3,7,8,8,"Fiji is a relaxation-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Relaxation
+Amalfi Coast,Italy,220,8,9,4,8,6,6,6,9,8,"Amalfi Coast is a luxury-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Luxury
+Abu Dhabi,United Arab Emirates,190,10,6,1,6,8,6,9,9,10,"Abu Dhabi is a family-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Family
+Hong Kong,China,150,7,9,4,3,8,8,8,8,9,"Hong Kong is a family-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Family
+Florence,Italy,140,7,9,2,1,10,6,6,7,8,"Florence is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Prague,Czech Republic,90,5,8,2,1,9,8,7,5,9,"Prague is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
+Queenstown Variant 2,New Zealand,120,7,8,10,4,5,7,7,8,10,"Mountain town known for hiking, adventure sports, lakes, and outdoor activities.",Adventure
+Patagonia Variant 2,Argentina/Chile,95,5,6,10,2,4,3,5,5,9,"Remote region famous for trekking, glaciers, mountains, and national parks.",Adventure
+Banff Variant 2,Canada,140,5,9,10,3,4,4,8,7,10,"Canadian Rockies destination with hiking, lakes, wildlife, skiing, and scenic drives.",Adventure
+Interlaken Variant 2,Switzerland,180,6,9,10,3,5,6,8,9,10,"Alpine destination for hiking, paragliding, lakes, and mountain excursions.",Adventure
+Pokhara Variant 2,Nepal,35,8,7,10,2,5,5,6,4,8,"Gateway to Himalayan trekking with lakes, mountain views, and adventure activities.",Adventure
+Bali Variant 2,Indonesia,65,10,9,6,10,5,8,8,8,9,"Warm island destination with beaches, spas, yoga retreats, resorts, and rice terraces.",Relaxation
+Maldives Variant 2,Maldives,250,10,7,2,10,3,4,8,10,9,"Tropical island destination with beaches, resorts, snorkeling, and quiet relaxation.",Relaxation
+Seychelles Variant 2,Seychelles,180,10,6,5,10,4,4,8,9,9,"Island destination with quiet beaches, nature reserves, resorts, and calm atmosphere.",Relaxation
+Santorini Variant 2,Greece,160,10,10,5,9,6,7,7,9,10,"Greek island known for sunsets, sea views, boutique hotels, and relaxing holidays.",Relaxation
+Phuket Variant 2,Thailand,70,10,9,4,10,4,9,8,8,8,"Beach destination with resorts, islands, spas, warm weather, and relaxed activities.",Relaxation
+Rome Variant 2,Italy,130,9,10,3,3,10,8,8,8,9,"Historic city with ancient ruins, museums, churches, food culture, and architecture.",Culture
+Kyoto Variant 2,Japan,120,8,9,5,2,10,6,8,8,10,"Cultural city with temples, gardens, traditional streets, tea houses, and history.",Culture
+Cairo Variant 2,Egypt,55,10,9,2,2,10,6,7,6,7,"Historic city with pyramids, museums, Islamic architecture, markets, and ancient culture.",Culture
+Istanbul Variant 2,Turkey,75,8,9,3,3,10,8,8,7,8,"City connecting Europe and Asia with mosques, palaces, bazaars, food, and history.",Culture
+Paris Variant 2,France,170,7,10,2,2,10,9,8,10,9,"Major cultural capital with museums, architecture, food, fashion, and historic neighborhoods.",Culture
+Hanoi Variant 2,Vietnam,35,9,8,4,3,8,7,7,4,9,"Affordable city with street food, history, local culture, and low travel costs.",Budget
+Chiang Mai Variant 2,Thailand,40,10,7,7,2,7,6,7,5,9,"Affordable northern Thai city with temples, markets, nature, and budget accommodation.",Budget
+Krakow Variant 2,Poland,60,6,8,4,2,9,8,8,5,10,"Affordable European city with history, food, nightlife, and cultural attractions.",Budget
+La Paz Variant 2,Bolivia,35,6,5,8,2,7,6,5,3,7,"Low-cost destination with markets, mountain scenery, local culture, and nearby adventure.",Budget
+Tbilisi Variant 2,Georgia,45,8,6,6,2,7,7,7,5,9,"Affordable city with food, wine culture, architecture, and access to mountain trips.",Budget
+Dubai Variant 2,United Arab Emirates,220,10,9,3,8,7,9,9,10,10,"Luxury city with premium hotels, shopping, fine dining, beaches, and modern attractions.",Luxury
+Monaco Variant 2,Monaco,300,9,9,3,7,6,9,6,10,10,"High-end destination with luxury hotels, yachts, casinos, fine dining, and exclusivity.",Luxury
+St. Moritz Variant 2,Switzerland,280,4,8,7,2,5,7,7,10,10,"Luxury alpine resort known for skiing, premium hotels, fine dining, and mountain scenery.",Luxury
+Bora Bora Variant 2,French Polynesia,350,10,7,4,10,3,4,7,10,10,"Luxury island destination with overwater villas, clear lagoons, beaches, and honeymoon resorts.",Luxury
+Milan Variant 2,Italy,190,8,9,2,2,9,9,7,10,9,"Fashion and design city with luxury shopping, fine dining, hotels, and cultural sites.",Luxury
+Orlando Variant 2,United States,180,10,10,2,5,6,6,10,7,9,"Family destination with theme parks, resorts, entertainment, and child-friendly activities.",Family
+Singapore Variant 2,Singapore,150,10,9,4,5,9,8,10,9,10,"Safe family-friendly city with attractions, gardens, museums, food, and efficient transport.",Family
+Copenhagen Variant 2,Denmark,170,6,8,3,4,9,7,10,8,10,"Safe city with parks, museums, cycling, family attractions, and relaxed urban planning.",Family
+Gold Coast Variant 2,Australia,140,9,9,5,10,5,7,10,7,10,"Family-friendly coastal city with beaches, theme parks, wildlife parks, and outdoor activities.",Family
+Tokyo Variant 2,Japan,160,7,10,3,3,10,9,10,9,10,"Safe city with museums, theme parks, food, transport, shopping, and family attractions.",Family
+Marrakesh Variant 2,Morocco,55,10,8,4,2,9,7,6,5,8,"Marrakesh is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Lisbon Variant 2,Portugal,95,9,9,4,6,9,8,8,7,9,"Lisbon is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Cusco Variant 2,Peru,50,7,8,9,2,9,6,6,5,8,"Cusco is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Cape Town Variant 2,South Africa,90,9,8,9,9,7,8,7,7,7,"Cape Town is a adventure-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Adventure
+Reykjavik Variant 2,Iceland,190,4,8,9,2,7,7,7,8,10,"Reykjavik is a adventure-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Adventure
+Zermatt Variant 2,Switzerland,220,4,8,10,2,4,5,7,10,10,"Zermatt is a adventure-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Adventure
+Da Nang Variant 2,Vietnam,45,10,7,5,10,5,6,8,5,9,"Da Nang is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
+Budapest Variant 2,Hungary,70,7,8,3,2,9,9,8,6,9,"Budapest is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
+Sofia Variant 2,Bulgaria,50,7,5,5,2,7,6,7,4,9,"Sofia is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
+Zanzibar Variant 2,Tanzania,85,10,7,3,10,5,5,7,7,8,"Zanzibar is a relaxation-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Relaxation
+Mauritius Variant 2,Mauritius,140,10,7,5,10,5,5,9,9,10,"Mauritius is a relaxation-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Relaxation
+Tulum Variant 2,Mexico,110,10,9,4,10,6,7,7,8,8,"Tulum is a relaxation-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Relaxation
+Nice Variant 2,France,170,9,9,4,9,8,8,7,10,9,"Nice is a luxury-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Luxury
+Doha Variant 2,Qatar,200,10,7,2,6,8,7,9,10,10,"Doha is a luxury-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Luxury
+Aspen Variant 2,United States,300,4,8,8,2,5,7,7,10,10,"Aspen is a luxury-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Luxury
+Barcelona Variant 2,Spain,130,9,10,4,8,10,9,9,8,9,"Barcelona is a family-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Family
+San Diego Variant 2,United States,170,9,8,4,10,7,7,10,8,9,"San Diego is a family-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Family
+Vancouver Variant 2,Canada,150,6,8,8,6,8,7,10,8,10,"Vancouver is a family-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Family
+Athens Variant 2,Greece,100,10,9,4,6,10,8,8,7,9,"Athens is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Seoul Variant 2,South Korea,110,7,9,4,3,9,9,9,8,10,"Seoul is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Siem Reap Variant 2,Cambodia,35,10,8,3,2,10,5,6,4,8,"Siem Reap is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
+Luang Prabang Variant 2,Laos,40,9,6,6,2,8,4,6,4,9,"Luang Prabang is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
+Madeira Variant 2,Portugal,100,8,7,10,7,5,5,8,7,10,"Madeira is a adventure-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Adventure
+Moab Variant 2,United States,120,9,8,10,2,3,4,7,6,9,"Moab is a adventure-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Adventure
+Fiji Variant 2,Fiji,160,10,6,4,10,4,4,8,9,9,"Fiji is a relaxation-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Relaxation
+Amalfi Coast Variant 2,Italy,220,9,10,5,9,7,7,7,10,9,"Amalfi Coast is a luxury-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Luxury
+Abu Dhabi Variant 2,United Arab Emirates,190,10,7,2,7,9,7,10,10,10,"Abu Dhabi is a family-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Family
+Hong Kong Variant 2,China,150,8,10,5,4,9,9,9,9,10,"Hong Kong is a family-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Family
+Florence Variant 2,Italy,140,8,10,3,2,10,7,7,8,9,"Florence is a culture-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Culture
+Prague Variant 2,Czech Republic,90,6,9,3,2,10,9,8,6,10,"Prague is a budget-oriented destination with budget score, activities, safety, and travel experience reflected in the numeric features.",Budget
