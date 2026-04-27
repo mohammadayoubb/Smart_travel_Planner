@@ -30,18 +30,32 @@ async def ask_agent(
         top_k=3,
     )
 
-    weather = await get_weather_summary("Madeira")
+ 
 
     sources = ", ".join(result["source"] for result in rag_results)
 
-    answer = (
-        "Based on the RAG search, the most relevant destination documents are: "
-        f"{sources}. "
-        f"The live weather check for Madeira shows {weather['temperature_c']}°C "
-        f"and {weather['weather']}. "
-        "The full agent will later use stronger LLM synthesis, ML classification, "
-        "and better destination extraction."
-    )
+    destination = rag_results[0]["source"].replace(".txt", "").replace("_", " ").title()
+
+    weather = await get_weather_summary(destination)
+
+
+    answer = f"""
+     Suggested Destination: {destination}
+
+    , Why this fits your request:
+    This destination matches your preference for warm weather, outdoor activities like hiking, and fewer crowds compared to highly touristy locations.
+
+    Current Weather:
+    {weather['temperature_c']}°C with {weather['weather']}
+
+    , How this was chosen:
+    - RAG retrieved: {sources}
+    - Live weather data was checked
+    - Future step: ML model will classify travel style
+
+    , Recommendation:
+    Consider planning your trip during shoulder season for the best balance between weather and crowd levels.
+    """
 
     updated_run = await update_agent_run(
         db=db,

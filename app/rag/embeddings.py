@@ -1,20 +1,26 @@
-from typing import List
+from openai import OpenAI
+
+from app.config import get_settings
+
+settings = get_settings()
+
+client = OpenAI(api_key=settings.openai_api_key)
 
 
-def fake_embed(text: str) -> List[float]:
-    """
-    Temporary embedding function.
-    Converts text into a simple numeric vector.
-    We will replace this later with real OpenAI embeddings.
-    """
-    return [float(ord(char)) for char in text[:100]]
+def embed_text(text: str) -> list[float]:
+    response = client.embeddings.create(
+        model=settings.openai_embedding_model,
+        input=text,
+    )
+
+    return response.data[0].embedding
 
 
 def embed_chunks(chunks: list[dict]) -> list[dict]:
     embedded = []
 
     for chunk in chunks:
-        embedding = fake_embed(chunk["content"])
+        embedding = embed_text(chunk["content"])
 
         embedded.append(
             {

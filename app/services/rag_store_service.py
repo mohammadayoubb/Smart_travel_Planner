@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.rag_chunk import RagChunk
 from app.rag.chunker import chunk_documents
-from app.rag.embeddings import embed_chunks, fake_embed
+from app.rag.embeddings import embed_chunks, embed_text
 from app.rag.loader import load_documents
 from app.rag.retriever import cosine_similarity
 
