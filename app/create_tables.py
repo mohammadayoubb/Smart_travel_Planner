@@ -2,6 +2,7 @@ import asyncio
 
 from app.database import Base, engine
 from app.models.agent_run import AgentRun
+from app.models.rag_chunk import RagChunk
 from app.models.tool_call_log import ToolCallLog
 from app.models.user import User
 
