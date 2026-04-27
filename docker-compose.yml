@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: smart-travel-postgres
+    environment:
+      POSTGRES_DB: smart_travel
+      POSTGRES_USER: smart_user
+      POSTGRES_PASSWORD: smart_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - smart_travel_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  smart_travel_postgres_data:
