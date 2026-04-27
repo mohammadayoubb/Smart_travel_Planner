@@ -4,7 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.schemas.agent import AgentQuestionRequest, AgentQuestionResponse
 from app.services.agent_service import create_agent_run, update_agent_run
-from app.services.rag_service import search_rag_documents
+from app.services.rag_store_service import search_stored_rag_chunks
+from app.services.weather_service import get_weather_summary
 
 router = APIRouter(
     prefix="/agent",
@@ -23,17 +24,23 @@ async def ask_agent(
         question=request.question,
     )
 
-    rag_results = search_rag_documents(
+    rag_results = await search_stored_rag_chunks(
+        db=db,
         query=request.question,
         top_k=3,
     )
 
+    weather = await get_weather_summary("Madeira")
+
     sources = ", ".join(result["source"] for result in rag_results)
 
     answer = (
-        "Based on the current RAG search, the most relevant destination "
-        f"documents are: {sources}. "
-        "Later, the full agent will combine RAG, ML classification, and live APIs."
+        "Based on the RAG search, the most relevant destination documents are: "
+        f"{sources}. "
+        f"The live weather check for Madeira shows {weather['temperature_c']}°C "
+        f"and {weather['weather']}. "
+        "The full agent will later use stronger LLM synthesis, ML classification, "
+        "and better destination extraction."
     )
 
     updated_run = await update_agent_run(
