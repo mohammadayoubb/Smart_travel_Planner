@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.schemas.auth import TokenResponse
 from app.schemas.user import UserCreate, UserLogin, UserResponse
+from app.services.jwt_service import create_access_token
 from app.services.user_service import (
     authenticate_user,
     create_user,
@@ -32,7 +34,7 @@ async def register_user(
     return user
 
 
-@router.post("/login", response_model=UserResponse)
+@router.post("/login", response_model=TokenResponse)
 async def login_user(
     user_data: UserLogin,
     db: AsyncSession = Depends(get_db),
@@ -49,4 +51,15 @@ async def login_user(
             detail="Invalid email or password.",
         )
 
-    return user
+    token = create_access_token(
+        {
+            "sub": str(user.id),
+            "email": user.email,
+        }
+    )
+
+    return TokenResponse(
+        access_token=token,
+        user_id=user.id,
+        email=user.email,
+    )
