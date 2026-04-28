@@ -1,5 +1,3 @@
-import json
-
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -26,7 +24,7 @@ async def ingest_rag_documents(
                 source=chunk["source"],
                 chunk_index=chunk["chunk_index"],
                 content=chunk["content"],
-                embedding=json.dumps(chunk["embedding"]),
+                embedding=chunk["embedding"],
             )
         )
 
@@ -47,8 +45,7 @@ async def search_stored_rag_chunks(
     scored = []
 
     for chunk in chunks:
-        embedding = json.loads(chunk.embedding)
-        score = cosine_similarity(query_embedding, embedding)
+        score = cosine_similarity(query_embedding, chunk.embedding)
 
         scored.append(
             {
