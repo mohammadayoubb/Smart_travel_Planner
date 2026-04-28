@@ -11,5 +11,23 @@ services:
     volumes:
       - smart_travel_postgres_data:/var/lib/postgresql/data
 
+  backend:
+    build: .
+    container_name: smart-travel-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+  frontend:
+    build: ./frontend
+    container_name: smart-travel-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
 volumes:
   smart_travel_postgres_data:
