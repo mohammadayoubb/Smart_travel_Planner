@@ -1,3 +1,4 @@
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -28,8 +29,7 @@ class RagChunk(Base):
         nullable=False,
     )
 
-    # We will later replace this with pgvector type
-    embedding: Mapped[str] = mapped_column(
-        Text,
+    embedding: Mapped[list[float]] = mapped_column(
+        Vector(1536),
         nullable=False,
     )

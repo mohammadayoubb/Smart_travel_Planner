@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.routes.agent import router as agent_router
 from app.routes.auth import router as auth_router
+from app.routes.ml import router as ml_router
 from app.routes.rag import router as rag_router
 
 settings = get_settings()
@@ -24,6 +25,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(agent_router)
 app.include_router(rag_router)
+app.include_router(ml_router)
 
 
 @app.get("/health")
