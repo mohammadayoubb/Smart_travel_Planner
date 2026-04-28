@@ -13,6 +13,87 @@ router = APIRouter(
 )
 
 
+def extract_destination_name(source: str) -> str:
+    return source.replace(".txt", "").replace("_", " ").title()
+
+
+def detect_travel_intents(question: str) -> list[str]:
+    q = question.lower()
+    intents = []
+
+    if any(word in q for word in ["cheap", "budget", "affordable", "low cost", "not expensive"]):
+        intents.append("budget-friendly travel")
+
+    if any(word in q for word in ["food", "eat", "restaurant", "cuisine", "local dishes"]):
+        intents.append("local food experiences")
+
+    if any(word in q for word in ["culture", "history", "historical", "museum", "temple", "heritage"]):
+        intents.append("culture and historical attractions")
+
+    if any(word in q for word in ["family", "kids", "children", "safe", "safety"]):
+        intents.append("family-friendly and safe travel")
+
+    if any(word in q for word in ["adventure", "hiking", "mountain", "outdoor", "trekking", "nature"]):
+        intents.append("outdoor and adventure activities")
+
+    if any(word in q for word in ["relax", "relaxation", "beach", "resort", "calm", "quiet"]):
+        intents.append("relaxation and calm experiences")
+
+    if any(word in q for word in ["luxury", "premium", "hotel", "resort", "fine dining"]):
+        intents.append("luxury travel")
+
+    if any(word in q for word in ["warm", "sunny", "hot", "summer"]):
+        intents.append("warm weather")
+
+    return intents
+
+
+def build_weather_note(question: str, weather: dict) -> str:
+    q = question.lower()
+
+    if not any(word in q for word in ["weather", "warm", "sunny", "hot", "cold", "snow"]):
+        return ""
+
+    temp = weather.get("temperature_c")
+
+    try:
+        temp_num = float(temp)
+    except (TypeError, ValueError):
+        return "Current weather could not be verified clearly, so check conditions again before booking."
+
+    if any(word in q for word in ["snow", "ski", "cold"]):
+        if temp_num <= 5:
+            return "The current weather also fits your preference for a colder or winter-style destination."
+        return (
+            f"The destination may fit the activity style, but the current temperature is {temp_num:g}°C, "
+            "so it may not currently feel like a cold or snowy destination."
+        )
+
+    if any(word in q for word in ["warm", "sunny", "hot"]):
+        if temp_num >= 20:
+            return "The current weather also supports your preference for warm conditions."
+        return (
+            f"The destination matches some of your preferences, but the current temperature is {temp_num:g}°C, "
+            "so it may not match your warm-weather preference right now."
+        )
+
+    return ""
+
+
+def build_reason_text(intents: list[str]) -> str:
+    if not intents:
+        return "This destination was selected because it best matches the overall meaning of your question."
+
+    if len(intents) == 1:
+        return f"This destination was selected because it matches your interest in {intents[0]}."
+
+    return (
+        "This destination was selected because it matches your interest in "
+        + ", ".join(intents[:-1])
+        + f", and {intents[-1]}."
+    )
+
+
 @router.post("/ask", response_model=AgentQuestionResponse)
 async def ask_agent(
     request: AgentQuestionRequest,
@@ -31,7 +112,7 @@ async def ask_agent(
     )
 
     if not rag_results:
-        answer = "I could not find relevant destination documents. Please run /rag/ingest first."
+        answer = "I could not find a suitable destination from the available travel knowledge base."
 
         updated_run = await update_agent_run(
             db=db,
@@ -45,8 +126,12 @@ async def ask_agent(
             status=updated_run.status,
         )
 
-    destination = rag_results[0]["source"].replace(".txt", "").replace("_", " ").title()
-    sources = ", ".join(result["source"] for result in rag_results)
+    top_result = rag_results[0]
+    destination = extract_destination_name(top_result["source"])
+    destination_context = top_result["content"]
+
+    intents = detect_travel_intents(request.question)
+    reason_text = build_reason_text(intents)
 
     try:
         weather = await get_weather_summary(destination)
@@ -56,23 +141,27 @@ async def ask_agent(
             "weather": "weather unavailable",
         }
 
-    answer = f"""
-     Suggested Destination: {destination}
+    weather_note = build_weather_note(request.question, weather)
 
-    , Why this fits your request:
-    This destination matches your preference for warm weather, outdoor activities like hiking, and fewer crowds compared to highly touristy locations.
+    answer = (
+        f"Suggested Destination: {destination}\n\n"
+        f"Why this fits your request:\n"
+        f"{reason_text}\n\n"
+        f"Destination Details:\n"
+        f"{destination_context}\n\n"
+        f"Current Weather:\n"
+        f"{weather['temperature_c']}°C with {weather['weather']}\n"
+    )
 
-    Current Weather:
-    {weather['temperature_c']}°C with {weather['weather']}
+    if weather_note:
+        answer += f"{weather_note}\n\n"
+    else:
+        answer += "\n"
 
-    , How this was chosen:
-    - RAG retrieved: {sources}
-    - Live weather data was checked
-    - Future step: ML model will classify travel style
-
-    , Recommendation:
-    Consider planning your trip during shoulder season for the best balance between weather and crowd levels.
-    """
+    answer += (
+        f"Recommendation:\n"
+        f"Compare this destination with the other suggested options before booking, especially if weather, budget, or crowd level is important to you."
+    )
 
     updated_run = await update_agent_run(
         db=db,

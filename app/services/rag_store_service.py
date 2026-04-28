@@ -39,7 +39,7 @@ async def search_stored_rag_chunks(
     query: str,
     top_k: int = 3,
 ) -> list[dict]:
-    query_embedding = fake_embed(query)
+    query_embedding = embed_text(query)
 
     result = await db.execute(select(RagChunk))
     chunks = result.scalars().all()
