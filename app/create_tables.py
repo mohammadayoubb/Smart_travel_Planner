@@ -1,5 +1,7 @@
 import asyncio
 
+from sqlalchemy import text
+
 from app.database import Base, engine
 from app.models.agent_run import AgentRun
 from app.models.rag_chunk import RagChunk
@@ -9,6 +11,7 @@ from app.models.user import User
 
 async def create_tables() -> None:
     async with engine.begin() as conn:
+        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
         await conn.run_sync(Base.metadata.create_all)
 
     print("Database tables created successfully.")
