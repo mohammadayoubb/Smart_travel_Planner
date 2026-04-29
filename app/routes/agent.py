@@ -1,123 +1,151 @@
 from fastapi import APIRouter, Depends
+from langsmith import traceable
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.dependencies.auth import get_current_user
+from app.models.user import User
 from app.schemas.agent import AgentQuestionRequest, AgentQuestionResponse
+from app.schemas.ml import TravelStyleFeatures
 from app.services.agent_service import create_agent_run, update_agent_run
+from app.services.llm_service import cheap_model_rewrite_query, strong_model_final_answer
+from app.services.ml_service import predict_travel_style
 from app.services.rag_store_service import search_stored_rag_chunks
+from app.services.tool_log_service import log_tool_call
 from app.services.weather_service import get_weather_summary
+from app.services.webhook_service import send_webhook
 
-router = APIRouter(
-    prefix="/agent",
-    tags=["Agent"],
-)
+router = APIRouter(prefix="/agent", tags=["Agent"])
 
 
 def extract_destination_name(source: str) -> str:
     return source.replace(".txt", "").replace("_", " ").title()
 
 
-def detect_travel_intents(question: str) -> list[str]:
-    q = question.lower()
-    intents = []
+def build_ml_features(destination: str, context: str, question: str) -> TravelStyleFeatures:
+    text = f"{destination} {context} {question}".lower()
 
-    if any(word in q for word in ["cheap", "budget", "affordable", "low cost", "not expensive"]):
-        intents.append("budget-friendly travel")
-
-    if any(word in q for word in ["food", "eat", "restaurant", "cuisine", "local dishes"]):
-        intents.append("local food experiences")
-
-    if any(word in q for word in ["culture", "history", "historical", "museum", "temple", "heritage"]):
-        intents.append("culture and historical attractions")
-
-    if any(word in q for word in ["family", "kids", "children", "safe", "safety"]):
-        intents.append("family-friendly and safe travel")
-
-    if any(word in q for word in ["adventure", "hiking", "mountain", "outdoor", "trekking", "nature"]):
-        intents.append("outdoor and adventure activities")
-
-    if any(word in q for word in ["relax", "relaxation", "beach", "resort", "calm", "quiet"]):
-        intents.append("relaxation and calm experiences")
-
-    if any(word in q for word in ["luxury", "premium", "hotel", "resort", "fine dining"]):
-        intents.append("luxury travel")
-
-    if any(word in q for word in ["warm", "sunny", "hot", "summer"]):
-        intents.append("warm weather")
-
-    return intents
+    return TravelStyleFeatures(
+        avg_daily_budget_usd=60 if any(w in text for w in ["cheap", "budget", "affordable", "hanoi"]) else 140,
+        warm_weather_score=9 if any(w in text for w in ["warm", "beach", "bali", "phuket", "hanoi"]) else 5,
+        tourist_crowd_score=4 if any(w in text for w in ["quiet", "fewer crowds", "not touristy"]) else 7,
+        hiking_score=9 if any(w in text for w in ["hiking", "mountain", "trekking", "patagonia", "queenstown", "madeira"]) else 4,
+        beach_score=9 if any(w in text for w in ["beach", "island", "bali", "phuket", "madeira"]) else 2,
+        museum_score=9 if any(w in text for w in ["culture", "history", "museum", "temple", "rome", "kyoto", "cairo"]) else 4,
+        nightlife_score=7 if any(w in text for w in ["nightlife", "restaurant", "food"]) else 4,
+        family_score=8 if any(w in text for w in ["family", "kids", "safe"]) else 5,
+        luxury_score=8 if any(w in text for w in ["luxury", "premium", "resort", "dubai"]) else 4,
+        safety_score=8 if any(w in text for w in ["safe", "family", "japan", "kyoto"]) else 6,
+        description=context,
+    )
 
 
-def build_weather_note(question: str, weather: dict) -> str:
-    q = question.lower()
-
-    if not any(word in q for word in ["weather", "warm", "sunny", "hot", "cold", "snow"]):
-        return ""
-
-    temp = weather.get("temperature_c")
-
+async def safe_send_webhook(run_id: int, user_id: int, question: str, answer: str, status: str) -> None:
     try:
-        temp_num = float(temp)
-    except (TypeError, ValueError):
-        return "Current weather could not be verified clearly, so check conditions again before booking."
-
-    if any(word in q for word in ["snow", "ski", "cold"]):
-        if temp_num <= 5:
-            return "The current weather also fits your preference for a colder or winter-style destination."
-        return (
-            f"The destination may fit the activity style, but the current temperature is {temp_num:g}°C, "
-            "so it may not currently feel like a cold or snowy destination."
+        await send_webhook(
+            {
+                "run_id": run_id,
+                "user_id": user_id,
+                "question": question,
+                "answer": answer,
+                "status": status,
+            }
         )
-
-    if any(word in q for word in ["warm", "sunny", "hot"]):
-        if temp_num >= 20:
-            return "The current weather also supports your preference for warm conditions."
-        return (
-            f"The destination matches some of your preferences, but the current temperature is {temp_num:g}°C, "
-            "so it may not match your warm-weather preference right now."
-        )
-
-    return ""
+    except Exception:
+        pass
 
 
-def build_reason_text(intents: list[str]) -> str:
-    if not intents:
-        return "This destination was selected because it best matches the overall meaning of your question."
+@traceable(name="cheap_model_rewrite")
+async def traced_rewrite_query(question: str) -> dict:
+    return await cheap_model_rewrite_query(question)
 
-    if len(intents) == 1:
-        return f"This destination was selected because it matches your interest in {intents[0]}."
 
-    return (
-        "This destination was selected because it matches your interest in "
-        + ", ".join(intents[:-1])
-        + f", and {intents[-1]}."
+@traceable(name="rag_retrieval")
+async def traced_rag_search(db: AsyncSession, query: str, top_k: int) -> list[dict]:
+    return await search_stored_rag_chunks(db=db, query=query, top_k=top_k)
+
+
+@traceable(name="ml_classification")
+def traced_ml_prediction(features: TravelStyleFeatures) -> str:
+    return predict_travel_style(features)
+
+
+@traceable(name="weather_fetch")
+async def traced_weather_fetch(destination: str) -> dict:
+    return await get_weather_summary(destination)
+
+
+@traceable(name="final_llm_synthesis")
+async def traced_final_answer(
+    question: str,
+    destination: str,
+    predicted_style: str,
+    destination_context: str,
+    weather: dict,
+) -> dict:
+    return await strong_model_final_answer(
+        question=question,
+        destination=destination,
+        predicted_style=predicted_style,
+        destination_context=destination_context,
+        weather=weather,
     )
 
 
 @router.post("/ask", response_model=AgentQuestionResponse)
+@traceable(name="travel_agent_run")
 async def ask_agent(
     request: AgentQuestionRequest,
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     run = await create_agent_run(
         db=db,
-        user_id=request.user_id,
+        user_id=current_user.id,
         question=request.question,
     )
 
-    rag_results = await search_stored_rag_chunks(
+    rewrite_result = await traced_rewrite_query(request.question)
+
+    await log_tool_call(
         db=db,
-        query=request.question,
+        agent_run_id=run.id,
+        tool_name="cheap_llm_query_rewrite",
+        tool_input={"question": request.question},
+        tool_output=rewrite_result,
+    )
+
+    rag_results = await traced_rag_search(
+        db=db,
+        query=rewrite_result["rewritten_query"],
         top_k=3,
+    )
+
+    await log_tool_call(
+        db=db,
+        agent_run_id=run.id,
+        tool_name="rag_retrieval",
+        tool_input={
+            "original_query": request.question,
+            "rewritten_query": rewrite_result["rewritten_query"],
+            "top_k": 3,
+        },
+        tool_output={
+            "sources": [result["source"] for result in rag_results],
+        },
     )
 
     if not rag_results:
         answer = "I could not find a suitable destination from the available travel knowledge base."
 
-        updated_run = await update_agent_run(
-            db=db,
-            run=run,
-            answer=answer,
+        updated_run = await update_agent_run(db=db, run=run, answer=answer)
+
+        await safe_send_webhook(
+            run_id=updated_run.id,
+            user_id=current_user.id,
+            question=request.question,
+            answer=updated_run.answer,
+            status=updated_run.status,
         )
 
         return AgentQuestionResponse(
@@ -130,43 +158,72 @@ async def ask_agent(
     destination = extract_destination_name(top_result["source"])
     destination_context = top_result["content"]
 
-    intents = detect_travel_intents(request.question)
-    reason_text = build_reason_text(intents)
+    ml_features = build_ml_features(
+        destination=destination,
+        context=destination_context,
+        question=request.question,
+    )
+
+    predicted_style = traced_ml_prediction(ml_features)
+
+    await log_tool_call(
+        db=db,
+        agent_run_id=run.id,
+        tool_name="ml_classifier",
+        tool_input=ml_features.model_dump(),
+        tool_output={"predicted_style": predicted_style},
+    )
 
     try:
-        weather = await get_weather_summary(destination)
-    except Exception:
+        weather = await traced_weather_fetch(destination)
+        weather_status = "success"
+    except Exception as exc:
         weather = {
             "temperature_c": "N/A",
             "weather": "weather unavailable",
+            "error": str(exc),
         }
+        weather_status = "error"
 
-    weather_note = build_weather_note(request.question, weather)
-
-    answer = (
-        f"Suggested Destination: {destination}\n\n"
-        f"Why this fits your request:\n"
-        f"{reason_text}\n\n"
-        f"Destination Details:\n"
-        f"{destination_context}\n\n"
-        f"Current Weather:\n"
-        f"{weather['temperature_c']}°C with {weather['weather']}\n"
-    )
-
-    if weather_note:
-        answer += f"{weather_note}\n\n"
-    else:
-        answer += "\n"
-
-    answer += (
-        f"Recommendation:\n"
-        f"Compare this destination with the other suggested options before booking, especially if weather, budget, or crowd level is important to you."
-    )
-
-    updated_run = await update_agent_run(
+    await log_tool_call(
         db=db,
-        run=run,
-        answer=answer,
+        agent_run_id=run.id,
+        tool_name="weather_api",
+        tool_input={"destination": destination},
+        tool_output=weather,
+        status=weather_status,
+    )
+
+    final_result = await traced_final_answer(
+        question=request.question,
+        destination=destination,
+        predicted_style=predicted_style,
+        destination_context=destination_context,
+        weather=weather,
+    )
+
+    await log_tool_call(
+        db=db,
+        agent_run_id=run.id,
+        tool_name="strong_llm_final_synthesis",
+        tool_input={
+            "question": request.question,
+            "destination": destination,
+            "predicted_style": predicted_style,
+        },
+        tool_output=final_result,
+    )
+
+    answer = final_result["answer"]
+
+    updated_run = await update_agent_run(db=db, run=run, answer=answer)
+
+    await safe_send_webhook(
+        run_id=updated_run.id,
+        user_id=current_user.id,
+        question=request.question,
+        answer=updated_run.answer,
+        status=updated_run.status,
     )
 
     return AgentQuestionResponse(
