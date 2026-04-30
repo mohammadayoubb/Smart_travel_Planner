@@ -69,11 +69,16 @@ async def strong_model_final_answer(
             {
                 "role": "system",
                 "content": (
-                    "You are a helpful travel planning assistant. "
-                    "Give a clear, practical recommendation. "
+                     "You are a helpful travel planning assistant. "
+                    "Write in a natural conversational style, not like a rigid checklist. "
+                    "Always include the travel style near the beginning using this exact line: "
+                    "'Travel Style: <predicted_style>'. "
+                    "Always include current weather if it is available. "
+                    "If weather is unavailable, briefly say that live weather could not be retrieved. "
+                    "Do not use markdown bold stars like ** anywhere. "
                     "Do not mention internal tools, RAG, embeddings, vector databases, or ML. "
                     "If live weather conflicts with the user's request, explain that clearly."
-                ),
+                                ),
             },
             {
                 "role": "user",
@@ -91,7 +96,13 @@ Destination context:
 {destination_context}
 
 Current weather:
-{weather}
+weather_text = (
+    f"{weather.get('temperature_c')}°C, "
+    f"{weather.get('weather')}, "
+    f"Humidity: {weather.get('humidity')}%"
+    if weather.get("temperature_c") is not None
+    else "Weather data unavailable"
+)
 """,
             },
         ],

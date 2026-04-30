@@ -147,11 +147,15 @@ async def ask_agent(
             answer=updated_run.answer,
             status=updated_run.status,
         )
-
+        total_cost = (
+            rewrite_result.get("estimated_cost_usd", 0)
+            + final_result.get("estimated_cost_usd", 0)
+        )
         return AgentQuestionResponse(
             run_id=updated_run.id,
             answer=updated_run.answer,
             status=updated_run.status,
+            total_cost_usd=total_cost,
         )
 
     top_result = rag_results[0]

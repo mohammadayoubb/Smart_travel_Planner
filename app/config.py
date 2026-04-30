@@ -7,13 +7,17 @@ class Settings(BaseSettings):
     app_name: str = "Smart Travel Planner API"
     environment: str = "development"
     webhook_url: str | None = None
+    database_url: str
+    openai_final_model: str = "gpt-4o"
     openai_api_key: str
     openai_embedding_model: str = "text-embedding-3-small"
     openai_chat_model: str = "gpt-4o-mini"
     jwt_secret_key: str = "dev-secret-change-me"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
+         extra="ignore",
     )
 
 

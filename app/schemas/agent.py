@@ -1,8 +1,13 @@
 from pydantic import BaseModel, Field
+from typing import Optional
 
-
+class AgentQuestionResponse(BaseModel):
+    run_id: int
+    answer: str
+    status: str
+    total_cost_usd: Optional[float] = None
+    
 class AgentQuestionRequest(BaseModel):
-    user_id: int = Field(gt=0)
     question: str = Field(min_length=5)
 
 

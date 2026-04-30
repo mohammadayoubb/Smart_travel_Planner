@@ -1,11 +1,12 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import declarative_base
 
-# Postgres connection (Docker)
-DATABASE_URL = "postgresql+asyncpg://smart_user:smart_password@localhost:5432/smart_travel"
+from app.config import get_settings
+
+settings = get_settings()
 
 engine = create_async_engine(
-    DATABASE_URL,
+    settings.database_url,
     echo=True,
 )
 
