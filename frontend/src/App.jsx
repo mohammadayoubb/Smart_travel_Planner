@@ -95,8 +95,7 @@ function App() {
             <h1>VoyageAI</h1>
 
             <p>
-              Ask for a trip idea and the assistant will use RAG, stored
-              destination knowledge, ML classification, and live weather data to
+              Ask for a trip idea and the assistant will
               build a travel recommendation.
             </p>
 
